@@ -9,6 +9,7 @@ $(function(){
 		if (search_topic){
                 chrome.runtime.sendMessage(
 					{topic: search_topic},
+					
 					function(response) {
 						result = response.farewell;
 						alert(result.summary);
