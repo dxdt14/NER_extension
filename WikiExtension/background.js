@@ -1,49 +1,73 @@
 var serverhost = 'http://127.0.0.1:8000';
 
-chrome.browserAction.onClicked.addListener((tab)=> {
-	chrome.tabs.sendMessage(tab.id, {message: "getDOM"}, function(response){
-		console.log("sent to content.js");
-		console.log(response.content);
-		text = response.content;
-		var url = serverhost + '/wiki/get_wiki_summary/?topic='+ encodeURIComponent(text) ;
-		console.log(url);
-		fetch(url)
-		.then(response => response.json())
-		.then(response => createNotif(tab, response))
-		.catch(error => console.log(error))
-		return true;
-	});
-});
-
-// chrome.browserAction.onClicked.addListener((tab) => {
+// chrome.browserAction.onClicked.addListener((tab)=> {
 // 	chrome.tabs.sendMessage(tab.id, {message: "getDOM"}, function(response){
 // 		console.log("sent to content.js");
 // 		console.log(response.content);
 // 		text = response.content;
-// 		jsonText = `{"data":${text}}`;
-// 		const json_file = JSON.parse(jsonText);
-// 		$.ajax({
-// 			url: serverhost + '/wiki/get_wiki_summary/',
-// 			type: "POST",
-// 			dataType: "json",
-// 			data: json_file,
-// 			statusCode: {
-// 				200: function(response){
-// 					var url = serverhost + '/wiki/get_wiki_summary/';
-// 					console.log(url);
-// 					fetch(url)
-// 					.then(response => response.json())
-// 					.then(response => createNotif(tab, response))
-// 					.catch(error => console.log(error))
-// 					return true;
-// 				}
-// 			}
-// 		})
-		
-		
-		
+// 		var url = serverhost + '/wiki/get_wiki_summary/?topic='+ encodeURIComponent(text) ;
+// 		console.log(url);
+// 		fetch(url)
+// 		.then(response => response.json())
+// 		.then(response => createNotif(tab, response))
+// 		.catch(error => console.log(error))
+// 		return true;
 // 	});
 // });
+
+// chrome.browserAction.onClicked.addListener((tab)=> {
+// 	console.log(tab.url);
+// 	var url = serverhost + '/wiki/get_wiki_summary/?topic='+ encodeURIComponent(tab.url);
+// 	console.log(url);
+// 	fetch(url)
+// 	.then(response => response.json())
+// 	.then(response => createNotif(tab, response))
+// 	.catch(error => console.log(error))
+	// chrome.tabs.sendMessage(tab.id, {message: "getDOM"}, function(response){
+	// 	console.log("sent to content.js");
+	// 	console.log(response.content);
+	// 	text = response.content;
+	// 	var url = serverhost + '/wiki/get_wiki_summary/?topic='+ encodeURIComponent(text) ;
+	// 	console.log(url);
+	// 	fetch(url)
+	// 	.then(response => response.json())
+	// 	.then(response => createNotif(tab, response))
+	// 	.catch(error => console.log(error))
+	// 	return true;
+	// });
+//});
+
+chrome.browserAction.onClicked.addListener((tab) => {
+	chrome.tabs.sendMessage(tab.id, {message: "getDOM"}, function(response){
+		console.log("sent to content.js");
+		console.log(response.content);
+		text = response.content;
+		//jsonText = `{"data":"${text}"}`;
+		jsonText = JSON.stringify({"data": text});
+		const json_file = JSON.parse(jsonText);
+		$.ajax({
+			url: serverhost + '/wiki/get_wiki_summary/',
+			dataType: "json",
+			data: json_file,
+			statusCode: {
+				200: function(response){
+					console.log(response)
+					createNotif(tab, response)
+					// var url = serverhost + '/wiki/get_wiki_summary/';
+					// console.log(url);
+					// fetch(url, {method: 'POST'})
+					// .then(response => response.json())
+					// .then(response => createNotif(tab, response))
+					// .catch(error => console.log(error))
+					// return true;
+				}
+			}
+		});
+		
+		
+		
+	});
+});
 
 
 // chrome.browserAction.onClicked.addListener((tab)=> {
@@ -104,6 +128,7 @@ function createNotif(tab, input){
 	// };
 	// chrome.notifications.create('NERnotif', notifOptions);
     result = input.summary;
+	console.log(input);
 	const str = result.join(', ');
     alert(str);
     

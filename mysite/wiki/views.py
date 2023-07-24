@@ -1,11 +1,12 @@
 from django.shortcuts import render
-
+from bs4 import BeautifulSoup
 # Create your views here.
-
+import requests
 from django.shortcuts import render
 import json
 from django.contrib.auth.models import User #####
 from django.http import JsonResponse , HttpResponse ####
+from django.views.decorators.csrf import csrf_exempt
 
 import wikipedia
 from flair.data import Sentence
@@ -17,12 +18,14 @@ tagger = SequenceTagger.load("flair/ner-english-large")
 def index(request):
     return HttpResponse("Hello, world. You're at the wiki index.")
 
-
+@csrf_exempt
 # https://pypi.org/project/wikipedia/#description
 def get_wiki_summary(request):
-    topic = request.GET.get('topic', None)
-    #topic = request.POST
-    print('topic:', topic)
+    topic = request.GET.get("data")
+    # response = requests.get(topic)
+    # soup = BeautifulSoup(response.text, "lxml")
+    # text = soup.find("body").text
+    print('data:', topic)
     sentences = [Sentence(x, use_tokenizer=True) for x in split_single(topic)]
     #sentence = Sentence(topic)
     tagger.predict(sentences)
@@ -45,3 +48,6 @@ def get_wiki_summary(request):
     print('json-data to be sent: ', data)
 
     return JsonResponse(data)
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'

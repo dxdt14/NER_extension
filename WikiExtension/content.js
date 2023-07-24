@@ -13,8 +13,8 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
     if(request.message == "getDOM"){
         console.log("received from background");
-        console.log(document.body.innerHTML);
-        sendResponse({content: document.body.innerHTML});
+        console.log(document.body.innerText);
+        sendResponse({content: document.body.innerText});
     }
     if(request.message == "highlight"){
         high_text = request.ner;

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Wiki Search",
-  "description": "This extension gives you a summary from WikiPedia.",
+  "name": "NER highlighting",
+  "description": "This extension highlights named entities on a webpage.",
   "version": "1.0",
   "icons": {
     "128": "icon128.png",
@@ -29,7 +29,7 @@
     "run_at": "document_start"
   }],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["jquery-3.1.0.min.js","background.js"],
     "persistent": false
   },
   "web_accessible_resources": [
